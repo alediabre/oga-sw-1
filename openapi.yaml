@@ -1,0 +1,224 @@
+openapi: 3.0.3
+info:
+  title: Ogathon.Challenges.WebApi
+  version: "1.0.0"
+  description: API para los 3 retos de desarrollo de software del Ogathon
+
+servers:
+  - url: http://localhost:8080/challenges
+
+tags:
+  - name: ogathon-sw-resource
+    description: Ogathon SW Challenge Endpoints
+
+paths:
+  /solution-1:
+    tags: ogathon-sw-resource
+    get:
+      summary: Calcula el número de patrones de propagación de un virus
+      parameters:
+        - in: query
+          name: n
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+          description: Número entero que representa la distancia entre dos sujetos
+      responses:
+        '200':
+          description: Resultado devuelto exitósamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: integer
+                    description: Número de patrones de propagación
+              example:
+                result: 5
+        '400':
+          description: Error de solicitud inválida. Parámetros incorrectos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                detail: "El parámetro 'n' debe ser un número entero positivo."
+        '422':
+          description: Error de validación de datos de entrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+              example:
+                detail:
+                  - loc: ["query", "n"]
+                    msg: "Input should be a valid integer, unable to parse string as an integer"
+                    type: "int_parsing"
+                    input: "wrong input"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                detail: "Error interno inesperado por parte del servidor."
+
+
+  /solution-2:
+    tags: ogathon-sw-resource
+    get:
+      summary: Calcula el número de secuencias que generan ciclos con 89.
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+          description: Número entero que representa el valor máximo para encontrar enteros que generen ciclos de 89.
+      responses:
+        '200':
+          description: Resultado devuelto exitosamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: integer
+                    description: Número de enteros menores al límite que generan ciclos con 89.
+              example:
+                result: 5
+        '400':
+          description: Error de solicitud inválida. Parámetros incorrectos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                detail: "El parámetro 'n' debe ser un número entero positivo."
+        '422':
+          description: Error de validación de datos de entrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+              example:
+                detail:
+                  - loc: ["query", "n"]
+                    msg: "Input should be a valid integer, unable to parse string as an integer"
+                    type: "int_parsing"
+                    input: "wrong input"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                detail: "Error interno inesperado por parte del servidor."
+
+              
+  /solution-3:
+    tags: ogathon-sw-resource
+    post:
+      summary: Calcula los movimientos necesarios para separar correctamente los residuos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContenedoresRequest'
+      responses:
+        '200':
+          description: Resultado devuelto exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: integer
+                    description: Número de movimientos realizados
+              example:
+                result: 4
+        '400':
+          description: Error de datos de entrada inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Error de validación de datos de entrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+              example:
+                detail:
+                  - loc: ["body"]
+                    msg: "Value error, Todos los contenedores deben tener el mismo número de residuos. Error en fila 2."
+                    type: "value_error"
+                    input: {
+                      "contenedores": [
+                        [2,0,1],
+                        [0,3,1],
+                        [1,1]
+                      ]
+                    }
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                detail: "Error interno inesperado por parte del servidor."
+
+components:
+  schemas:
+    ContenedoresRequest:
+      type: object
+      properties:
+        contenedores:
+          type: array
+          items:
+            type: array
+            items:
+              type: integer
+      required:
+        - contenedores
+      example:
+        contenedores:
+          [
+            [2, 0, 1],
+            [0, 3, 1],
+            [1, 1, 1]
+          ]
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Mensaje de error
+    ValidationErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            type: object
+            properties:
+              loc:
+                type: array
+                items:
+                  type: string
+              msg:
+                type: string
+              type:
+                type: string
+              input:
+                type: object
