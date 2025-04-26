@@ -33,7 +33,7 @@ async def load_openapi_yaml():
 def solution_1(n: int = Query(..., ge=1)):
     try:
         result = contar_combinaciones(n)
-        return {"result": result}
+        return {"result": str(result)}
     except Exception:
         raise HTTPException(status_code=500, detail=internal_error_message)
 
@@ -41,7 +41,7 @@ def solution_1(n: int = Query(..., ge=1)):
 def solution_2(limit: int = Query(..., ge=1)):
     try:
         result = get_secuencias(limit)
-        return {"result": result}
+        return {"result": str(result)}
     except Exception:
         raise HTTPException(status_code=500, detail=internal_error_message)
     
@@ -49,6 +49,6 @@ def solution_2(limit: int = Query(..., ge=1)):
 def solution_3(request: ContenedoresRequest):
     try:
         result = min_movimientos(request.contenedores)
-        return {"result": result}
+        return {"result": str(result)}
     except Exception:
         raise HTTPException(status_code=500, detail=internal_error_message)

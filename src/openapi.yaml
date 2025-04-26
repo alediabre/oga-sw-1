@@ -33,7 +33,7 @@ paths:
                 type: object
                 properties:
                   result:
-                    type: integer
+                    type: string
                     description: Número de patrones de propagación
               example:
                 result: 5
@@ -88,7 +88,7 @@ paths:
                 type: object
                 properties:
                   result:
-                    type: integer
+                    type: string
                     description: Número de enteros menores al límite que generan ciclos con 89.
               example:
                 result: 5
@@ -141,7 +141,7 @@ paths:
                 type: object
                 properties:
                   result:
-                    type: integer
+                    type: string
                     description: Número de movimientos realizados
               example:
                 result: 4
